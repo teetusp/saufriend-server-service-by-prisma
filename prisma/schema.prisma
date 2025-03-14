@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user_tb {
+  userId              Int       @id     @default(autoincrement())
+  userFullname        String    @db.VarChar(100)
+  userEmail           String    @db.VarChar(100)
+  userName            String    @db.VarChar(50)
+  userPassword        String    @db.VarChar(50) 
+  userImage           String    @db.VarChar(150)
+}
+
+model myfriend_tb{
+  myfriendId          Int       @id     @default(autoincrement())
+  myfriendFullname    String    @db.VarChar(100)
+  myfriendPhone       String    @db.VarChar(100)
+  myfriendAge         Int    
+  myfriendMajor       MyFriendMajor
+  myfriendImage       String    @db.VarChar(100)
+  userId              Int
+} 
+
+enum MyFriendMajor {
+  IoT
+  DTI
+  IT
+}
