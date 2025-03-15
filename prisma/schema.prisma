@@ -20,6 +20,8 @@ model user_tb {
   userName            String    @db.VarChar(50)
   userPassword        String    @db.VarChar(50) 
   userImage           String    @db.VarChar(150)
+
+  myFriends    myfriend_tb[] @relation("UserToFriends") // เชื่อมไปที่ myfriend_tb
 }
 
 model myfriend_tb{
@@ -30,6 +32,8 @@ model myfriend_tb{
   myfriendMajor       MyFriendMajor
   myfriendImage       String    @db.VarChar(100)
   userId              Int
+
+  user          user_tb @relation("UserToFriends", fields: [userId], references: [userId]) // FK ไป user_tb
 } 
 
 enum MyFriendMajor {

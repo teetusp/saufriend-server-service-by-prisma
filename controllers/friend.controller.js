@@ -58,4 +58,81 @@ exports.createFriend = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: `ERROR:  ${err}` });
     }
-}   
+}
+
+// กรณีมีการอัปโหลดไฟล์ (โดยที่ผู้ใช้จะเลือกไฟล์หรือไม่เลือกไฟล์เพื่ออัปโหลดก็ได้)
+// (แต่ถ้าไม่เลือกไฟล์ที่อัปโหลดจะบันทึกเป็นค่าว่าง)
+exports.editFriend = async (req, res) => {
+    try {
+        let data = {
+            ...req.body,
+            myfriendAge: parseInt(req.body.myfriendAge),
+            userId: parseInt(req.body.userId)
+        }
+
+        if (req.file) {
+            //หากมีการแก้ไขรูป ให้ลบรูปเดิมทิ้ง
+            //- ค้นหารูปเดิมที่มีอยู่
+            const friendData = await prisma.myfriend_tb.findUnique({
+                where: {
+                    myfriendId: parseInt(req.params.myfriendId)
+                }
+            })
+            //แก้ไขรูป
+            data.myfriendImage = req.file.path.replace("images\\myfriend\\", "")
+        } else {
+            delete data.myfriendImage
+        }
+
+        const result = await prisma.myfriend_tb.update({
+            data: data,
+            where: {
+                myfriendId: parseInt(req.params.myfriendId)
+            }
+        })
+        res.status(200).json({
+            message: 'Update data successfully',
+            data: result
+        });
+    } catch (err) {
+        res.status(500).json({ message: `ERROR: ${err}` });
+    }
+}
+
+//ฟังก์ชันลบข้อมูล myfriend_tb
+exports.deleteFriend = async (req, res) => {
+    try {
+        const result = await prisma.myfriend_tb.delete({
+            where: {
+                myfriendId: parseInt(req.params.myfriendId)
+            }
+        })
+        res.status(200).json({
+            message: 'Delele data successfully',
+            data: result
+        });
+    } catch (err) {
+        res.status(500).json({ message: `ERROR:  ${err}` });
+    }
+}
+exports.getAllFriend = async (req, res) => {
+    try{
+        const result = await prisma.myfriend_tb.findMany({
+            where: {
+                myfriendId: parseInt(req.params.myfriendId)
+            }
+        })
+        if(result){
+            res.status(200).json({
+                message: 'Get have data successfully',
+                data: result
+            });            
+        }else{
+            res.status(404).json({ 
+                message: 'Not have data' 
+            });
+        }
+    }catch(err){
+        res.status(500).json({ message: `ERROR:  ${err}` });
+    }
+}

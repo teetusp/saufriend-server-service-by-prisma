@@ -11,10 +11,9 @@ const userController = require('./../controllers/user.controller.js');
 const router = express.Router();
 
 // กำหนดเส้นทาง และการเรียกใช้ controller
-//เพิ่มข้อมูล
-router.post('/', userController.uploadUser, userController.createUser); 
-//แก้ไขข้อมูล
-//ตรวจสอบชื่อผู้ใช้ รหัสผ่าน
+router.post('/', userController.uploadUser, userController.createUser); //เพิ่มข้อมูล
+router.get('/:userName/:userPassword', userController.checkLoginUser); //ตรวจสอบชื่อผู้ใช้ รหัสผ่าน
+router.put('/:userId',userController.uploadUser, userController.editUser);  //แก้ไขข้อมูล
 
 // export router เพื่อนำไปใช้ที่ server.js
 module.exports = router;

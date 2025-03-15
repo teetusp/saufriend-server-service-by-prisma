@@ -11,8 +11,10 @@ const friendController = require('./../controllers/friend.controller.js');
 const router = express.Router();
 
 // กำหนดเส้นทาง และการเรียกใช้ controller
-//เพิ่มข้อมูล
-router.post('/', friendController.uploadFriend, friendController.createFriend); 
+router.post('/', friendController.uploadFriend, friendController.createFriend); //เพิ่มข้อมูล
+router.put('/:myfriendId', friendController.uploadFriend, friendController.editFriend); //แก้ไขข้อมูล
+router.delete('/:myfriendId', friendController.deleteFriend); //ลบข้อมูล
+router.get('/:myfriendId', friendController.getAllFriend); //แสดงข้อมูล
 //แก้ไขข้อมูล
 //ตรวจสอบชื่อผู้ใช้ รหัสผ่าน
 
